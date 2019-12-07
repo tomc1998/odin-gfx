@@ -1,0 +1,9 @@
+[submodule "deps/odin-gl"]
+	path = deps/odin-gl
+	url = https://github.com/vassvik/odin-gl
+[submodule "deps/odin-stb"]
+	path = deps/odin-stb
+	url = https://github.com/vassvik/odin-stb
+[submodule "deps/odin-glfw"]
+	path = deps/odin-glfw
+	url = https://github.com/vassvik/odin-glfw
