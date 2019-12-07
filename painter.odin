@@ -1,10 +1,11 @@
 package gfx
 
 import linalg "core:math/linalg"
-import gl "shared:odin-gl"
-import stbi "shared:odin-stb/stbi"
+import "core:math"
+import gl "deps/odin-gl"
+import stbi "deps/odin-stb/stbi"
 import "core:os"
-import stbtt "shared:odin-stb/stbtt"
+import stbtt "deps/odin-stb/stbtt"
 
 /** Corresponds 1 to 1 with a gpu texture */
 Atlas :: struct {
@@ -161,12 +162,12 @@ draw_text :: proc(p: ^Painter, text: string, x, y: f32, col : u32 = 0xffffffff) 
 
     w, h : f32 = cast(f32)(bc.x1 - bc.x0), cast(f32)(bc.y1 - bc.y0);
     append(&p.vert_list,
-          Vert { x+bc.xoff+cpos+0, y+bc.yoff+0, 0, u0, v0, col },
-          Vert { x+bc.xoff+cpos+w, y+bc.yoff+0, 0, u1, v0, col },
-          Vert { x+bc.xoff+cpos+w, y+bc.yoff+h, 0, u1, v1, col },
-          Vert { x+bc.xoff+cpos+0, y+bc.yoff+0, 0, u0, v0, col },
-          Vert { x+bc.xoff+cpos+0, y+bc.yoff+h, 0, u0, v1, col },
-          Vert { x+bc.xoff+cpos+w, y+bc.yoff+h, 0, u1, v1, col });
+           Vert { math.floor(x+bc.xoff+cpos+0), math.floor(y+bc.yoff+0), 0, u0, v0, col },
+           Vert { math.floor(x+bc.xoff+cpos+w), math.floor(y+bc.yoff+0), 0, u1, v0, col },
+           Vert { math.floor(x+bc.xoff+cpos+w), math.floor(y+bc.yoff+h), 0, u1, v1, col },
+           Vert { math.floor(x+bc.xoff+cpos+0), math.floor(y+bc.yoff+0), 0, u0, v0, col },
+           Vert { math.floor(x+bc.xoff+cpos+0), math.floor(y+bc.yoff+h), 0, u0, v1, col },
+           Vert { math.floor(x+bc.xoff+cpos+w), math.floor(y+bc.yoff+h), 0, u1, v1, col });
 
     cpos += bc.xadvance;
   }
@@ -178,12 +179,12 @@ fill_rect :: proc(p: ^Painter, x, y, w, h : f32, col : u32 = 0xffffffff) {
     p.mode = .Image;
   }
   append(&p.vert_list,
-         Vert { x+0, y+0, 0, 0, 0, col },
-         Vert { x+w, y+0, 0, 1, 0, col },
-         Vert { x+w, y+h, 0, 1, 1, col },
-         Vert { x+0, y+0, 0, 0, 0, col },
-         Vert { x+0, y+h, 0, 0, 1, col },
-         Vert { x+w, y+h, 0, 1, 1, col });
+         Vert { math.floor(x)+0, math.floor(y)+0, 0, 0, 0, col },
+         Vert { math.floor(x)+w, math.floor(y)+0, 0, 1, 0, col },
+         Vert { math.floor(x)+w, math.floor(y)+h, 0, 1, 1, col },
+         Vert { math.floor(x)+0, math.floor(y)+0, 0, 0, 0, col },
+         Vert { math.floor(x)+0, math.floor(y)+h, 0, 0, 1, col },
+         Vert { math.floor(x)+w, math.floor(y)+h, 0, 1, 1, col });
 }
 
 draw_img :: proc(p: ^Painter, t: Tex, x, y, w, h : f32, col : u32 = 0xffffffff) {
@@ -193,12 +194,12 @@ draw_img :: proc(p: ^Painter, t: Tex, x, y, w, h : f32, col : u32 = 0xffffffff) 
   }
   assert(t.atlas == &p.atlas);
   append(&p.vert_list,
-         Vert { x+0, y+0, 0, t.u0, t.v0, col },
-         Vert { x+w, y+0, 0, t.u1, t.v0, col },
-         Vert { x+w, y+h, 0, t.u1, t.v1, col },
-         Vert { x+0, y+0, 0, t.u0, t.v0, col },
-         Vert { x+0, y+h, 0, t.u0, t.v1, col },
-         Vert { x+w, y+h, 0, t.u1, t.v1, col });
+         Vert { math.floor(x)+0, math.floor(y)+0, 0, t.u0, t.v0, col },
+         Vert { math.floor(x)+w, math.floor(y)+0, 0, t.u1, t.v0, col },
+         Vert { math.floor(x)+w, math.floor(y)+h, 0, t.u1, t.v1, col },
+         Vert { math.floor(x)+0, math.floor(y)+0, 0, t.u0, t.v0, col },
+         Vert { math.floor(x)+0, math.floor(y)+h, 0, t.u0, t.v1, col },
+         Vert { math.floor(x)+w, math.floor(y)+h, 0, t.u1, t.v1, col });
 }
 
 /** Doesn't remove uploaded data, just clears CPU buffer */

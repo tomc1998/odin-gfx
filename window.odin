@@ -1,7 +1,7 @@
 package gfx
 
-import glfw "shared:odin-glfw"
-import gl "shared:odin-gl"
+import glfw "deps/odin-glfw"
+import gl "deps/odin-gl"
 import "core:fmt"
 
 Window :: struct {

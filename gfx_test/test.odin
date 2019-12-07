@@ -1,6 +1,6 @@
 package gfx_test
 
-import "gfx"
+import gfx ".."
 import "core:fmt"
 
 Entity :: struct {
@@ -26,7 +26,7 @@ main :: proc () {
   w := gfx.create_window("TestGLGame");
 
   // Init painter
-  painter := gfx.init_painter("assets/pkmn-atlas.png", "assets/Hack-Regular.ttf", 12.0);
+  painter := gfx.init_painter("assets/test-atlas.png", "assets/cruft.ttf", 24.0);
 
   // Init entities
   entities := [dynamic]^Entity{};
@@ -34,23 +34,23 @@ main :: proc () {
   append(&entities, player);
 
   // Get textures from atlas
-  player_tex := gfx.init_tex(&painter.atlas, 25, 36, 14, 19);
+  player_tex := gfx.init_tex(&painter.atlas, 0, 0, 32, 32);
 
   for !gfx.window_should_close(&w) {
     ////// Input
     gfx.poll_events();
     // Player input
     if (gfx.key_down(&w, gfx.KEY_W)) {
-      player.yvel = -4.0;
+      player.yvel = -2.5;
     } else if (gfx.key_down(&w, gfx.KEY_S)) {
-      player.yvel = 4.0;
+      player.yvel = 2.5;
     } else {
       player.yvel = 0.0;
     }
     if (gfx.key_down(&w, gfx.KEY_A)) {
-      player.xvel = -4.0;
+      player.xvel = -2.5;
     } else if (gfx.key_down(&w, gfx.KEY_D)) {
-      player.xvel = 4.0;
+      player.xvel = 2.5;
     } else {
       player.xvel = 0.0;
     }
@@ -63,7 +63,7 @@ main :: proc () {
       e.y += e.yvel;
       switch ederive in e.derived {
       case Player:
-       gfx.draw_img(&painter, player_tex, e.x, e.y, 28, 38);
+       gfx.draw_img(&painter, player_tex, e.x, e.y, 64, 64);
       case:
        gfx.fill_rect(&painter, e.x, e.y, 64, 64);
       }
