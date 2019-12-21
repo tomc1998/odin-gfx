@@ -16,8 +16,12 @@ Player :: struct {
   using entity: Entity,
 }
 
-new_entity :: proc($T: typeid) -> ^Player {
-  e := new(Player);
+Enemy :: struct {
+  using entity: Entity,
+}
+
+new_entity :: proc($T: typeid) -> ^T {
+  e := new(T);
   e.derived = e^;
   return e;
 }
@@ -26,15 +30,19 @@ main :: proc () {
   w := gfx.create_window("TestGLGame");
 
   // Init painter
-  painter := gfx.init_painter("assets/test-atlas.png", "assets/cruft.ttf", 24.0);
+  painter := gfx.init_painter("assets/cruft.ttf", 24.0);
+  atlas := gfx.add_tex(&painter, "assets/test-atlas.png");
+  gfx.gpu_sync(&painter);
 
   // Init entities
   entities := [dynamic]^Entity{};
   player := new_entity(Player);
+  enemy := new_entity(Enemy);
   append(&entities, player);
+  append(&entities, enemy);
 
   // Get textures from atlas
-  player_tex := gfx.init_tex(&painter.atlas, 0, 0, 32, 32);
+  player_tex := gfx.sub_tex(atlas, 0, 0, 32, 32);
 
   for !gfx.window_should_close(&w) {
     ////// Input
