@@ -71,7 +71,7 @@ init_painter :: proc(font_filename: string,
 
   // Load white texture into atlas
   p.white_tex = atlas_add_tex_from_data(p.atlas, 1, 1, 1, []u8{255});
-  fmt.printf("%f %f %f %f\n", p.white_tex.u0, p.white_tex.v0, p.white_tex.u1, p.white_tex.v1);
+  gpu_sync(&p);
 
   return;
 }
