@@ -67,7 +67,6 @@ init_painter :: proc(font_filename: string,
   gl.BindVertexArray(p.vao);
   gl.GenBuffers(1, &p.vbo);
   gl.BindBuffer(gl.ARRAY_BUFFER, p.vbo);
-  gl.EnableVertexAttribArray(0);
 
   // Load white texture into atlas
   p.white_tex = atlas_add_tex_from_data(p.atlas, 1, 1, 1, []u8{255});
@@ -139,8 +138,10 @@ _upload_buffer :: proc(p: ^Painter) {
   // TODO setup col / uv pointers
   gl.EnableVertexAttribArray(0);
   gl.EnableVertexAttribArray(1);
+  gl.EnableVertexAttribArray(2);
   gl.VertexAttribPointer(0, 3, gl.FLOAT, gl.FALSE, size_of(Vert), nil);
   gl.VertexAttribPointer(1, 2, gl.FLOAT, gl.FALSE, size_of(Vert), cast(rawptr)cast(uintptr)(3 * size_of(f32)));
+  gl.VertexAttribPointer(2, 4, gl.UNSIGNED_BYTE, gl.TRUE, size_of(Vert), cast(rawptr)cast(uintptr)(5 * size_of(f32)));
 }
 
 /** Render this painter. This will flush all current drawing tot he gpu, so
