@@ -104,23 +104,23 @@ draw_text :: proc(p: ^Painter, text: string, x, y: f32, col : u32 = 0xffffffff) 
   }
 }
 
-fill_rect :: proc(p: ^Painter, x, y, w, h : f32, col : u32 = 0xffffffff) {
-  draw_img(p, p.white_tex, x, y, w, h, col);
+fill_rect :: proc(p: ^Painter, x, y, w, h : f32, col : u32 = 0xffffffff, z : f32 = 0.0) {
+  draw_img(p, p.white_tex, x, y, w, h, col, z);
 }
 
-draw_img :: proc(p: ^Painter, t: Tex, x, y, w, h : f32, col : u32 = 0xffffffff) {
+draw_img :: proc(p: ^Painter, t: Tex, x, y, w, h : f32, col : u32 = 0xffffffff, z : f32 = 0.0) {
   if (p.mode == .Text) {
     flush_render(p);
     p.mode = .Image;
   }
   assert(t.atlas == p.atlas);
   append(&p.vert_list,
-         Vert { math.floor(x)+0, math.floor(y)+0, 0, t.u0, t.v0, col },
-         Vert { math.floor(x)+w, math.floor(y)+0, 0, t.u1, t.v0, col },
-         Vert { math.floor(x)+w, math.floor(y)+h, 0, t.u1, t.v1, col },
-         Vert { math.floor(x)+0, math.floor(y)+0, 0, t.u0, t.v0, col },
-         Vert { math.floor(x)+0, math.floor(y)+h, 0, t.u0, t.v1, col },
-         Vert { math.floor(x)+w, math.floor(y)+h, 0, t.u1, t.v1, col });
+         Vert { math.floor(x)+0, math.floor(y)+0, z, t.u0, t.v0, col },
+         Vert { math.floor(x)+w, math.floor(y)+0, z, t.u1, t.v0, col },
+         Vert { math.floor(x)+w, math.floor(y)+h, z, t.u1, t.v1, col },
+         Vert { math.floor(x)+0, math.floor(y)+0, z, t.u0, t.v0, col },
+         Vert { math.floor(x)+0, math.floor(y)+h, z, t.u0, t.v1, col },
+         Vert { math.floor(x)+w, math.floor(y)+h, z, t.u1, t.v1, col });
 }
 
 /** Doesn't remove uploaded data, just clears CPU buffer */
@@ -149,7 +149,7 @@ calling this again will render nothing. */
 flush_render :: proc(p: ^Painter) {
   _upload_buffer(p);
   _clear_buffer(p);
-  mat := linalg.ortho3d(0, 800, 600, 0, -1, 1);
+  mat := linalg.ortho3d(0, 800, 600, 0, -10000, 10000);
 
   // Activate img / text shader depending on mode
   uniforms : ^gl.Uniforms;

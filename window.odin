@@ -21,7 +21,7 @@ poll_events :: proc() {
 }
 
 clear_window :: proc(w: ^Window) {
-  gl.Clear(gl.COLOR_BUFFER_BIT);
+  gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 }
 
 /** See input_constants.odin */
@@ -41,6 +41,7 @@ create_window :: proc (windowName: string) -> (w: Window) {
   gl.load_up_to(3, 3, glfw.set_proc_address);
   gl.Enable(gl.BLEND);
   gl.BlendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+  gl.Enable(gl.DEPTH_TEST);
   gl.ClearColor(0.0, 0.0, 0.0, 1.0);
 
   return;
