@@ -33,8 +33,8 @@ gpu_sync :: proc(p: ^Painter) {
   atlas_gpu_sync(p.atlas);
 }
 
-/** Call gpu_sync afterwards to push changes to the GPU */
-add_tex :: proc(p: ^Painter, filename: cstring) -> (t: Tex) {
+
+add_tex :: proc(p: ^Painter, filename: cstring) -> (t: TexInfo) {
   succ: bool;
   t, succ = atlas_add_tex(p.atlas, filename);
   if !succ {

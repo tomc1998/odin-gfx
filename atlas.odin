@@ -18,6 +18,12 @@ Atlas :: struct {
   bin: Bin,
 }
 
+TexInfo :: struct {
+  tex: Tex,
+  w: i32,
+  h: i32,
+}
+
 Tex :: struct {
   atlas: ^Atlas,
   u0, v0, u1, v1: f32,
@@ -90,17 +96,18 @@ atlas_add_tex_from_data :: proc(a: ^Atlas, w: i32, h: i32, bpp: i32, data: []u8)
 }
 
 /** Add a texture from a filename to the atlas, bin packing. Panic if bin full. */
-atlas_add_tex :: proc(a: ^Atlas, filename: cstring) -> (t: Tex, succ: bool) {
+atlas_add_tex :: proc(a: ^Atlas, filename: cstring) -> (t: TexInfo, succ: bool) {
   succ = true;
-  w, h, bpp: i32;
-  data := stbi.load(filename, &w, &h, &bpp, 0);
+  bpp: i32;
+  data := stbi.load(filename, &t.w, &t.h, &bpp, 0);
   defer stbi.image_free(data);
   if data == nil {
     succ = false;
     return;
   }
   succ = true;
-  t = atlas_add_tex_from_data(a, w, h, bpp, mem.slice_ptr(data, cast(int)(w*h*bpp)));
+  t.tex = atlas_add_tex_from_data(
+    a, t.w, t.h, bpp, mem.slice_ptr(data, cast(int)(t.w*t.h*bpp)));
   return;
 }
 

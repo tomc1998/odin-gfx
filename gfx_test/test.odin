@@ -42,7 +42,7 @@ main :: proc () {
   append(&entities, enemy);
 
   // Get textures from atlas
-  player_tex := gfx.sub_tex(atlas, 0, 0, 32, 32);
+  player_tex := gfx.sub_tex(atlas.tex, 0, 0, 32, 32);
 
   for !gfx.window_should_close(&w) {
     ////// Input
