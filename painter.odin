@@ -128,14 +128,12 @@ _clear_buffer :: proc(p: ^Painter) {
   clear(&p.vert_list);
 }
 
-/** vbo should be bound to ARRAY_BUFFER */
 _upload_buffer :: proc(p: ^Painter) {
   p.uploaded_verts = cast(u32)len(p.vert_list);
   if len(p.vert_list) == 0 {return;}
   gl.BindVertexArray(p.vao);
   gl.BindBuffer(gl.ARRAY_BUFFER, p.vbo);
   gl.BufferData(gl.ARRAY_BUFFER, len(p.vert_list) * size_of(p.vert_list[0]), &p.vert_list[0], gl.STATIC_DRAW);
-  // TODO setup col / uv pointers
   gl.EnableVertexAttribArray(0);
   gl.EnableVertexAttribArray(1);
   gl.EnableVertexAttribArray(2);
@@ -149,7 +147,7 @@ calling this again will render nothing. */
 flush_render :: proc(p: ^Painter) {
   _upload_buffer(p);
   _clear_buffer(p);
-  mat := linalg.ortho3d(0, 800, 600, 0, -10000, 10000);
+  mat := linalg.matrix_ortho3d(0, 800, 600, 0, -10000, 10000);
 
   // Activate img / text shader depending on mode
   uniforms : ^gl.Uniforms;
