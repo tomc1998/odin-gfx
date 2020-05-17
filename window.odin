@@ -2,6 +2,7 @@ package gfx
 
 import glfw "deps/odin-glfw"
 import gl "deps/odin-gl"
+import "core:runtime"
 import "core:fmt"
 
 KeyCallback :: proc(key: i32, action: KeyAction, mods: i32);
@@ -44,6 +45,7 @@ _internal_glfw_key_callback :: proc "c" (
   w: glfw.Window_Handle,
   key: i32, scancode: i32, action: i32, mods: i32)
 {
+  context = runtime.default_context();
   user_data := cast(^_GlfwUserState)(glfw.get_window_user_pointer(w));
   if user_data.key_callback != nil {
     user_data.key_callback(key, KeyAction(action), mods);
